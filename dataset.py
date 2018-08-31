@@ -15,7 +15,7 @@ labels_df = labels_df.sample(frac=1).reset_index(drop=True)
 
 
 g = labels_df['breed'].value_counts()
-classes = list(g.keys()[:6])
+classes = list(g.keys())
 n_classes = len(classes)
 
 labels_df = labels_df.loc[labels_df['breed'].isin(classes)]
