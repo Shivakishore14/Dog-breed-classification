@@ -60,7 +60,7 @@ def cnn_model_fn(features, labels, mode):
 
 x = tf.placeholder(tf.float32, shape=[None, 128*128])
 y = tf.placeholder(tf.int32, shape=[None])
-
+global_step_op = tf.train.create_global_step()
 
 train_op, loss, logits, accuracy = cnn_model_fn({'x': x}, y, None)
 
@@ -88,7 +88,7 @@ with tf.Session() as sess:
     while dataset.n_epochs <= 1000:
         i += 1
         batch_x, batch_y = dataset.get_batch(size=64)
-        
+    
         _, loss_, logits_, global_step, summary_ = sess.run([train_op, loss, logits, tf.train.get_global_step(), summary_op],
                                                   feed_dict={x: batch_x, y: batch_y})
         summary_writer.add_summary(summary_, global_step)
