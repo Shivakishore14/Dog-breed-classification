@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 import model
 import os
+import datetime
 
 x = tf.placeholder(tf.float32, shape=[None, 128*128], name='x')
 y = tf.placeholder(tf.int32, shape=[None], name='y')
@@ -30,12 +31,14 @@ with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         print "cannot load checkpoints"
 
-    while dataset.n_epochs <= 200:
-        batch_x, batch_y = dataset.get_batch(size=64)
+    while dataset.n_epochs <= 250:
+        start_time = datetime.datetime.now()
+        batch_x, batch_y = dataset.get_batch(size=256)
     
         _, loss_, logits_, global_step, summary_ = sess.run([train_op, loss, logits, tf.train.get_global_step(), summary_op],
                                                   feed_dict={x: batch_x, y: batch_y})
         summary_writer.add_summary(summary_, global_step)
         if global_step % 2 == 0:
-            print "step : {}, epoch : {} , loss : {} ".format(global_step, dataset.n_epochs, loss_)
             saver.save(sess, checkpoint_prefix, global_step=global_step)
+            end_time = datetime.datetime.now()
+            print "step : {}, epoch : {} , loss : {} , time: {}s".format(global_step, dataset.n_epochs, loss_, (end_time - start_time).seconds)
