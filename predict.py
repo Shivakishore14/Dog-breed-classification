@@ -16,8 +16,8 @@ with tf.Session(graph=graph) as sess:
     saver.restore(sess, checkpoint_file)
     
 
-    x = graph.get_tensor_by_name("Placeholder_2:0")
-    logits = graph.get_tensor_by_name("dense_1/BiasAdd:0")
+    x = graph.get_tensor_by_name("x:0")
+    logits = graph.get_tensor_by_name("logits/BiasAdd:0")
     batch_x, batch_y = dataset.get_batch(size=64)
     logits_ = sess.run(logits, feed_dict={x: batch_x})
     count = 0
