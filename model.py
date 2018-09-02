@@ -27,9 +27,18 @@ def cnn_model_fn(features, labels, mode):
       activation=tf.nn.relu)
     pool2 = tf.layers.max_pooling2d(inputs=conv2, pool_size=[2, 2], strides=2)
 
+    # Convolutional Layer #3 and Pooling Layer #3
+    conv3 = tf.layers.conv2d(
+      inputs=pool2,
+      filters=96,
+      kernel_size=[5, 5],
+      padding="same",
+      activation=tf.nn.relu)
+    pool3 = tf.layers.max_pooling2d(inputs=conv3, pool_size=[2, 2], strides=2)
+
     # Dense Layer
-    pool2_flat = tf.reshape(pool2, [-1, 32 * 32 * 64])
-    dense = tf.layers.dense(inputs=pool2_flat, units=1024, activation=tf.nn.relu)
+    pool3_flat = tf.reshape(pool3, [-1, 16 * 16 * 96])
+    dense = tf.layers.dense(inputs=pool3_flat, units=1024, activation=tf.nn.relu)
     dropout = tf.layers.dropout(
       inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
 
@@ -48,7 +57,7 @@ def cnn_model_fn(features, labels, mode):
     loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
 
     # Configure the Training Op (for TRAIN mode)
-    optimizer = tf.train.RMSPropOptimizer(learning_rate=0.001)
+    optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
     train_op = optimizer.minimize(
         loss=loss,
         global_step=tf.train.get_global_step())

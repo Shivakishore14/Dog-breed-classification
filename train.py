@@ -33,7 +33,7 @@ with tf.Session() as sess:
 
     while dataset.n_epochs <= 250:
         start_time = datetime.datetime.now()
-        batch_x, batch_y = dataset.get_batch(size=256)
+        batch_x, batch_y = dataset.get_batch(size=128)
     
         _, loss_, logits_, global_step, summary_ = sess.run([train_op, loss, logits, tf.train.get_global_step(), summary_op],
                                                   feed_dict={x: batch_x, y: batch_y})
