@@ -23,7 +23,7 @@ labels_df = labels_df.loc[labels_df['breed'].isin(classes)]
 # utility functions for getting image and converting class to one hot
 def get_image(filename):
     img = Image.open(filename)
-    return np.asarray(img, dtype="int32").flatten() / 255
+    return np.asarray(img, dtype="int32").flatten() / 255.0
 def get_images(filenames):
     return [get_image(os.path.join(train_data_dir, filename+'.jpg')) for filename in filenames]
 def get_labels(classes_):
@@ -46,4 +46,3 @@ def get_batch(size=64):
     df_ = labels_df.iloc[batch_start: batch_end]
     batch_i_pointer = batch_end
     return get_images(df_['id'].values), get_labels(df_['breed'].values)
-
