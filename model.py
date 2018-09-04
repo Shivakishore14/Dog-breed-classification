@@ -5,7 +5,7 @@ import dataset
 def cnn_model_fn(features, labels, mode):
     """Model function for CNN."""
     # Input Layer
-    input_layer = tf.reshape(features["x"], [-1, 128, 128, 1])
+    input_layer = tf.reshape(features["x"], [-1, 128, 128, 3])
 
     # Convolutional Layer #1
     conv1 = tf.layers.conv2d(
@@ -36,9 +36,27 @@ def cnn_model_fn(features, labels, mode):
       activation=tf.nn.relu)
     pool3 = tf.layers.max_pooling2d(inputs=conv3, pool_size=[2, 2], strides=2)
 
+    # Convolutional Layer #3 and Pooling Layer #3
+    conv4 = tf.layers.conv2d(
+      inputs=pool3,
+      filters=128,
+      kernel_size=[5, 5],
+      padding="same",
+      activation=tf.nn.relu)
+    pool4 = tf.layers.max_pooling2d(inputs=conv4, pool_size=[2, 2], strides=2)
+
+    # Convolutional Layer #3 and Pooling Layer #3
+    conv5 = tf.layers.conv2d(
+      inputs=pool4,
+      filters=252,
+      kernel_size=[5, 5],
+      padding="same",
+      activation=tf.nn.relu)
+    pool5 = tf.layers.max_pooling2d(inputs=conv5, pool_size=[2, 2], strides=2)
+
     # Dense Layer
-    pool3_flat = tf.reshape(pool3, [-1, 16 * 16 * 96])
-    dense = tf.layers.dense(inputs=pool3_flat, units=1024, activation=tf.nn.relu)
+    pool5_flat = tf.reshape(pool5, [-1, 4 * 4 * 252])
+    dense = tf.layers.dense(inputs=pool5_flat, units=1024, activation=tf.nn.relu)
     dropout = tf.layers.dropout(
       inputs=dense, rate=0.4, training=mode == tf.estimator.ModeKeys.TRAIN)
 

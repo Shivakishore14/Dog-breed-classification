@@ -5,7 +5,7 @@ import model
 import os
 import datetime
 
-x = tf.placeholder(tf.float32, shape=[None, 128*128], name='x')
+x = tf.placeholder(tf.float32, shape=[None, 128*128*3], name='x')
 y = tf.placeholder(tf.int32, shape=[None], name='y')
 global_step_op = tf.train.create_global_step()
 
