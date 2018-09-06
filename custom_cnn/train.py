@@ -19,18 +19,9 @@ loss_summary = tf.summary.scalar("loss", loss)
 summary_op = tf.summary.merge([loss_summary])
 
 saver = tf.train.Saver(tf.global_variables(), max_to_keep=2)
-
-
 with tf.Session() as sess:
     summary_writer = tf.summary.FileWriter(out_dir, sess.graph)
-    try:
-        checkpoint_file = tf.train.latest_checkpoint(checkpoint_prefix)
-        saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
-        saver.restore(sess, checkpoint_file)
-    except:
-        sess.run(tf.global_variables_initializer())
-        print "cannot load checkpoints"
-
+    sess.run(tf.global_variables_initializer())
     while dataset.n_epochs <= 250:
         start_time = datetime.datetime.now()
         batch_x, batch_y = dataset.get_batch(size=128)
