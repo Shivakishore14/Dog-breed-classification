@@ -65,7 +65,7 @@ classifier = tf.estimator.Estimator(model_fn=model_fun, model_dir="/tmp/mymodel"
 # )
 
 def train_input_fn(batch_size):
-    ds = tf.data.Dataset.from_generator(dataset.batch_yeild, (tf.float32, tf.int64), (tf.TensorShape([None, 299, 299, 3]), tf.TensorShape([None])))
+    ds = tf.data.Dataset.from_generator(lambda : dataset.batch_yeild(batch_size), (tf.float32, tf.int64), (tf.TensorShape([None, 299, 299, 3]), tf.TensorShape([None])))
     ds = ds.make_one_shot_iterator().get_next()
     return ds
-classifier.train(input_fn=lambda : train_input_fn(10), steps=1000)
+classifier.train(input_fn=lambda : train_input_fn(10), steps=2000)
