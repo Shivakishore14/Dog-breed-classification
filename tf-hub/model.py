@@ -65,8 +65,6 @@ classifier = tf.estimator.Estimator(model_fn=model_fun, model_dir="/tmp/mymodel"
 # )
 
 def train_input_fn(batch_size, num_epochs):
-    ds = tf.data.Dataset.from_generator(lambda : dataset.batch_yeild(size=batch_size), (tf.float32, tf.int64), (tf.TensorShape([None, 299, 299, 3]), tf.TensorShape([None])))
-    ds = ds.repeat(num_epochs)
-    ds = ds.make_one_shot_iterator().get_next()
+    ds = tf.data.Dataset.from_generator(lambda : dataset.batch_yeild(size=batch_size, max_epochs=num_epochs), (tf.float32, tf.int64), (tf.TensorShape([None, 299, 299, 3]), tf.TensorShape([None])))
     return ds
 classifier.train(input_fn=lambda : train_input_fn(48, 250), steps=2000)
